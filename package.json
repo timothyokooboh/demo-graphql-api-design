@@ -1,4 +1,30 @@
 {
   "name": "graphql-api-design",
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.0.2",
+  "type": "module",
+  "dependencies": {
+    "@apollo/server": "^4.10.4",
+    "@graphql-tools/schema": "^10.0.4",
+    "@prisma/client": "^5.14.0",
+    "apollo-server": "^3.13.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "graphql": "^16.8.1",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-tag": "^2.12.6",
+    "graphql-ws": "^5.16.0",
+    "jsonwebtoken": "^9.0.2",
+    "ws": "^8.17.0"
+  },
+  "scripts": {
+    "dev": "nodemon ./src/index.js",
+    "prisma:init": "npx prisma init",
+    "prisma:migrate": "npx prisma migrate dev --name init",
+    "prisma:studio": "npx prisma studio"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.1",
+    "prisma": "^5.14.0"
+  }
 }
