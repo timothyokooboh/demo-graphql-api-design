@@ -19,7 +19,7 @@
   },
   "scripts": {
     "dev": "nodemon ./src/index.js",
-    "build": "node ./src/index.js",
+    "start": "node ./src/index.js",
     "prisma:init": "npx prisma init",
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:studio": "npx prisma studio"
