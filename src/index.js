@@ -23,6 +23,7 @@ export const pubsub = new PubSub();
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
+
   plugins: [
     // Proper shutdown for HTTP server
     ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -41,6 +42,7 @@ const schema = makeExecutableSchema({
 
 const server = new ApolloServer({
   schema,
+  introspection: true, // enable introspection
   schemaDirectives: {},
   formatError(formattedError, err) {
     // log errors to an error service
