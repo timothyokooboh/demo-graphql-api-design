@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { GraphQLError } from "graphql";
 import jwt from "jsonwebtoken";
 
 export const hashPassword = async (password) => {
@@ -19,7 +20,7 @@ export const createJwt = (user) => {
   return token;
 };
 
-export const verifyJwt = (password, hash) => {
+export const verifyPassword = (password, hash) => {
   return bcrypt.compare(password, hash);
 };
 
@@ -32,7 +33,12 @@ export const getUserFromToken = (token) => {
 
 export const isAuthenticated = (next) => (root, args, context, info) => {
   if (!context.user) {
-    throw new Error("Not authenticated");
+    throw new GraphQLError("You need to sign in", {
+      extensions: {
+        code: "FORBIDDEN",
+        requiredArgs: ["email", "password"],
+      },
+    });
   }
 
   return next(root, args, context, info);
@@ -51,14 +57,17 @@ export const signIn = async (_, { input }, { prisma }) => {
       email: input.email,
     },
   });
+
   if (!user) {
     throw new Error("User not found");
   }
-  const isPasswordValid = await verifyJwt(input.password, user.password);
+
+  const isPasswordValid = await verifyPassword(input.password, user.password);
 
   if (!isPasswordValid) {
-    throw new Error("Incorrect password");
+    throw new Error("Invalid email or password");
   }
+
   const token = createJwt(user);
 
   return {

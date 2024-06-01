@@ -1,10 +1,13 @@
 import gql from "graphql-tag";
 
 export const typeDefs = gql`
+  # Definition
+  directive @log on FIELD_DEFINITION
+
   type Post {
     id: ID!
-    title: String!
-    content: String
+    title: String! @log
+    content: String @deprecated(reason: "Use 'description' field instead")
     author: String
     created_at: String
     updated_at: String

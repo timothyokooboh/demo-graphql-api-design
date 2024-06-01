@@ -17,8 +17,9 @@ import { useServer } from "graphql-ws/lib/use/ws";
 dotenv.config();
 const app = express();
 const httpServer = http.createServer(app);
-export const pubsub = new PubSub();
 const prisma = new PrismaClient();
+export const pubsub = new PubSub();
+
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
@@ -38,7 +39,15 @@ const schema = makeExecutableSchema({
   ],
 });
 
-const server = new ApolloServer({ schema });
+const server = new ApolloServer({
+  schema,
+  schemaDirectives: {},
+  formatError(formattedError, err) {
+    // log errors to an error service
+
+    return formattedError;
+  },
+});
 
 // Creating the WebSocket server
 const wsServer = new WebSocketServer({
@@ -73,5 +82,7 @@ app.use(
   })
 );
 
-await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
-console.log(`🚀 Server ready at http://localhost:4000/`);
+await new Promise((resolve) =>
+  httpServer.listen({ port: process.env.PORT }, resolve)
+);
+console.log(`🚀 Server ready at http://localhost:${process.env.PORT}/`);
